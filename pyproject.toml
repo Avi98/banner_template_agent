@@ -11,6 +11,11 @@ dependencies = [
     "asyncio>=4.0.0",
     "boto3-stubs>=1.40.25",
     "langchain-core>=0.3.75",
+    "langchain>=0.3.27",
+    "langgraph>=0.6.6",
+    "langchain-google-genai>=2.0.10",
+    "pydantic>=2.11.7",
+    "python-dotenv>=1.1.1",
 ]
 [tool.ruff]
 indent-width = 4

@@ -112,7 +112,7 @@ class FreepikCrawler:
 				"(elements) => elements.map(el => el.src)"
 			)
 
-			images = {"product_banner_url": [url for url in img_src_list]}
+			images = {"product_banner_url": [url for url in img_src_list][:2]}
 
 		#     for element in image_elements:
 		#         try:
@@ -159,29 +159,27 @@ class FreepikCrawler:
 		logger.info("Extracted product links from current page")
 		return images
 
-	async def crawl_search(self, query: str, dynamic_value: str, max_pages: int = 3):
+	async def crawl_search(
+		self,
+		query: str,
+		dynamic_value: str,
+	):
 		all_images = {}
 
-		for page_num in range(1, max_pages + 1):
-			try:
-				url = self.build_url(query, dynamic_value)
+		try:
+			url = self.build_url(query, dynamic_value)
 
-				if page_num > 1:
-					url += f"&page={page_num}"
-				print(f"Crawling page {page_num}: {url}")
+			assert self.page, "Page not found in crawl_search"
 
-				assert self.page, "Page not found in crawl_search"
+			await self.page.goto(url, wait_until="networkidle")
+			await self.wait_for_content()
 
-				await self.page.goto(url, wait_until="networkidle")
-				await self.wait_for_content()
+			page_images = await self.extract_image_data()
+			all_images = page_images
 
-				page_images = await self.extract_image_data()
-				all_images = page_images
+			await asyncio.sleep(self.delay)
 
-				await asyncio.sleep(self.delay)
-
-			except Exception as e:
-				logger.error(f"Error crawling page {page_num}: {e}")
-				break
+		except Exception as e:
+			logger.error(f"Error crawling page : {e}")
 
 		return all_images
