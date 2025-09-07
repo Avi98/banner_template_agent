@@ -1,0 +1,25 @@
+[project]
+name = "my-uv-project"
+version = "0.1.0"
+description = "My sample project using uv"
+dependencies = [
+    "requests",
+    "playwright",
+    "google-generativeai>=0.8.5",
+    "boto3>=1.40.25",
+    "pillow>=11.3.0",
+    "asyncio>=4.0.0",
+    "boto3-stubs>=1.40.25",
+    "langchain-core>=0.3.75",
+]
+[tool.ruff]
+indent-width = 4
+
+[tool.ruff.format]
+docstring-code-format = true
+quote-style = "double"
+indent-style = "tab"
+skip-magic-trailing-comma = false
+
+[dependency-groups]
+dev = ["ruff>=0.12.12"]
